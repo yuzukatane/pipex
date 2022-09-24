@@ -6,7 +6,7 @@
 /*   By: kyuzu <kyuzu@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/24 23:49:34 by kyuzu             #+#    #+#             */
-/*   Updated: 2022/09/25 00:09:08 by kyuzu            ###   ########.fr       */
+/*   Updated: 2022/09/25 00:29:37 by kyuzu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,10 @@ char	*check_path(t_args *args, char **all_path, int nbr, int errno)
 		else if (access(path, X_OK) == 0)
 			return (path);
 		else if (access(path, F_OK) == 0)
+		{
+			free(path);
 			free_args(args, 1, NULL, errno);
+		}
 		free(path);
 		i++;
 	}

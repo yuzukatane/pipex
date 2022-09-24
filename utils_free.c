@@ -6,7 +6,7 @@
 /*   By: kyuzu <kyuzu@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/24 23:51:58 by kyuzu             #+#    #+#             */
-/*   Updated: 2022/09/25 00:21:36 by kyuzu            ###   ########.fr       */
+/*   Updated: 2022/09/25 00:33:47 by kyuzu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	free_args(t_args *args, int flag, char *msg, int errno)
 			free_double_pointer(args->cmd[i]);
 	}
 	free(args->cmd);
-	free(args->path);
+	free_double_pointer(args->path);
 	free(args);
 	if (flag != 2)
 		put_msg_and_exit(msg, errno);

@@ -6,7 +6,7 @@
 /*   By: kyuzu <kyuzu@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/24 23:47:36 by kyuzu             #+#    #+#             */
-/*   Updated: 2022/09/25 00:19:24 by kyuzu            ###   ########.fr       */
+/*   Updated: 2022/09/25 00:33:13 by kyuzu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,6 @@ void	creat_cmd_and_path(t_args *args, int nbr, char *argv[], char **envp)
 		args->path[i] = check_path(args, all_path, i, errno);
 		i++;
 	}
-	free(all_path);
+	free_double_pointer(all_path);
 	args->path[i] = NULL;
 }
