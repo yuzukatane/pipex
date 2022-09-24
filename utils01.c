@@ -6,22 +6,22 @@
 /*   By: kyuzu <kyuzu@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/24 22:14:40 by kyuzu             #+#    #+#             */
-/*   Updated: 2022/09/24 22:14:41 by kyuzu            ###   ########.fr       */
+/*   Updated: 2022/09/24 22:46:35 by kyuzu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "pipex.h"
 
-void	check_fd(t_args *args)
+void	check_fd(t_args *args, int errno)
 {
 	if (args->file[0] == -1 || args->file[1] == -1)
 	{
-		free_args(args, 0, "could not open the files");
+		free_args(args, 0, NULL, errno);
 	}
 }
 
-void	check_cmd(t_args *args, int nbr)
+void	check_cmd(t_args *args, int nbr, int errno)
 {
 	int	i;
 
@@ -37,7 +37,7 @@ void	check_cmd(t_args *args, int nbr)
 					free_double_pointer(args->cmd[i]);
 				i++;
 			}
-			free_args(args, 0, "failed to allocate memory");
+			free_args(args, 0, NULL, errno);
 		}
 		i++;
 	}
@@ -56,7 +56,7 @@ void	free_double_pointer(char **p)
 	free(p);
 }
 
-void	put_msg_and_exit(char *msg)
+void	put_msg_and_exit(char *msg, int errno)
 {
 	if (msg == NULL)
 		perror(NULL);
@@ -65,7 +65,7 @@ void	put_msg_and_exit(char *msg)
 	exit (1);
 }
 
-void	free_args(t_args *args, int flag, char *msg)
+void	free_args(t_args *args, int flag, char *msg, int errno)
 {
 	int	i;
 	if (flag > 0)
@@ -77,5 +77,5 @@ void	free_args(t_args *args, int flag, char *msg)
 	free(args->cmd);
 	free(args->path);
 	free(args);
-	put_msg_and_exit(msg);
+	put_msg_and_exit(msg, errno);
 }
