@@ -6,33 +6,39 @@
 /*   By: kyuzu <kyuzu@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/24 12:08:20 by kyuzu             #+#    #+#             */
-/*   Updated: 2022/09/24 15:36:55 by kyuzu            ###   ########.fr       */
+/*   Updated: 2022/09/24 18:45:09 by kyuzu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	check_fd(int file1, int file2)
+void	check_fd(t_args *args)
 {
-	if (file1 == -1 || file2 == -1)
+	if (args->file[0] == -1 || args->file[1] == -1)
 	{
-		perror(NULL);
-		exit(1);
+		free_args(args, 0, "could not open the files");
 	}
 }
 
-void	check_cmd(char **cmd1, char **cmd2)
+void	check_cmd(t_args *args, int nbr)
 {
-	if (cmd1 == NULL)
+	int	i;
+
+	i = 0;
+	while (i < nbr)
 	{
-		perror(NULL);
-		exit(1);
-	}
-	else if (cmd2 == NULL)
-	{
-		free_double_pointer(cmd1);
-		perror(NULL);
-		exit(1);
+		if (args->cmd[i] == NULL)
+		{
+			i = 0;
+			while (i < nbr)
+			{
+				if (args->cmd[i] != NULL)
+					free_double_pointer(args->cmd[i]);
+				i++;
+			}
+			free_args(args, 0, "failed to allocate memory");
+		}
+		i++;
 	}
 }
 
@@ -51,6 +57,24 @@ void	free_double_pointer(char **p)
 
 void	put_msg_and_exit(char *msg)
 {
-	ft_putendl_fd(msg, 2);
+	if (msg == NULL)
+		perror(NULL);
+	else
+		ft_putendl_fd(msg, 2);
 	exit (1);
+}
+
+void	free_args(t_args *args, int flag, char *msg)
+{
+	int	i;
+	if (flag > 0)
+	{
+		i = -1;
+		while (args->cmd[++i] != NULL)
+			free_double_pointer(args->cmd[i]);
+	}
+	free(args->cmd);
+	free(args->path);
+	free(args);
+	put_msg_and_exit(msg);
 }

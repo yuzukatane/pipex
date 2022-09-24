@@ -6,7 +6,7 @@
 /*   By: kyuzu <kyuzu@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/23 10:51:24 by kyuzu             #+#    #+#             */
-/*   Updated: 2022/09/24 16:04:38 by kyuzu            ###   ########.fr       */
+/*   Updated: 2022/09/24 18:01:47 by kyuzu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,19 +24,20 @@
 #include <string.h>
 
 typedef struct s_args {
-	int		*file;
+	int		file[2];
 	char	***cmd;
 	char	**path;
 }	t_args;
 
-void	check_fd(int file1, int file2);
-void	check_cmd(char **cmd1, char **cmd2);
+void	check_fd(t_args *args);
+void	check_cmd(t_args *args, int nbr);
 void	free_double_pointer(char **p);
+void	free_args(t_args *args, int flag, char *msg);
 void	put_msg_and_exit(char *msg);
 
-void	pipex(int file[2], char **cmd[2], char *path[2], char **envp);
+void	pipex(t_args *args, char **envp);
 
-char	**take_path(char **envp, char **cmd1, char **cmd2);
-char	*check_path(char **cmd, char **all_path, char **other_cmd);
+char	**take_path(t_args *args, char **envp);
+char	*check_path(t_args *args, char **all_path, int nbr);
 
 #endif
