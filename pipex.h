@@ -6,7 +6,7 @@
 /*   By: kyuzu <kyuzu@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/23 10:51:24 by kyuzu             #+#    #+#             */
-/*   Updated: 2022/09/24 18:01:47 by kyuzu            ###   ########.fr       */
+/*   Updated: 2022/09/24 22:16:19 by kyuzu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,10 @@ void	put_msg_and_exit(char *msg);
 
 void	pipex(t_args *args, char **envp);
 
+t_args	*init_args(int n);
 char	**take_path(t_args *args, char **envp);
 char	*check_path(t_args *args, char **all_path, int nbr);
+
+
 
 #endif
