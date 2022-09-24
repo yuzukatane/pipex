@@ -6,7 +6,7 @@
 /*   By: kyuzu <kyuzu@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/23 10:50:07 by kyuzu             #+#    #+#             */
-/*   Updated: 2022/09/24 22:51:58 by kyuzu            ###   ########.fr       */
+/*   Updated: 2022/09/24 23:53:24 by kyuzu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,77 +15,90 @@
 int	main(int argc, char *argv[], char **envp)
 {
 	t_args	*args;
-	char	**all_path;
 	int		nbr;
-	int		i;
 	int		errno;
 
+	errno = 0;
 	if (argc < 5)
 		put_msg_and_exit("too few arguments", errno);
 	nbr = argc - 3;
-	args = init_args(nbr, errno);
+	args = init_args(nbr);
 	args->file[0] = open(argv[1], O_RDONLY);
-	args->file[1] = open(argv[argc - 1], O_WRONLY | O_TRUNC);
+	args->file[1] = open(argv[argc - 1], O_WRONLY | O_TRUNC | O_CREAT);
 	check_fd(args, errno);
-	i = -1;
-	while (++i < nbr)
-		args->cmd[i] = ft_split(argv[i + 2], ' ');
-	args->cmd[i] = NULL;
-	check_cmd(args, nbr, errno);
-	all_path = take_path(args, envp, errno);
-	i = -1;
-	while (++i < nbr)
-		args->path[i] = check_path(args, all_path, i, errno);
-	args->path[i] = NULL;
-	
+	creat_cmd_and_path(args, nbr, argv, envp);
 	pipex(args, envp, errno);
-	
 	return (0);
 }
 
-void	before_pipe(t_args *args, int pfd[2], char **envp, int errno)
-{
-	dup2(args->file[0], STDIN_FILENO);
-	dup2(pfd[1], STDOUT_FILENO);
-	close(pfd[0]);
-	close(pfd[1]);
-	if (execve(args->path[0], args->cmd[0], envp) == -1)
-		free_args(args, 1, NULL, errno);
-}
+// void	creat_cmd_and_path(t_args *args, int nbr, char *argv[], char **envp)
+// {
+// 	int		i;
+// 	int		errno;
+// 	char	**all_path;
 
-void	after_pipe(t_args *args, int pfd[2], char **envp, int errno)
-{
-	dup2(pfd[0], STDIN_FILENO);
-	dup2(args->file[1], STDOUT_FILENO);
-	close(pfd[0]);
-	close(pfd[1]);
-	if (execve(args->path[1], args->cmd[1], envp) == -1)
-		free_args(args, 1, NULL, errno);
-}
+// 	i = 0;
+// 	errno = 0;
+// 	while (i < nbr)
+// 	{
+// 		args->cmd[i] = ft_split(argv[i + 2], ' ');
+// 		i++;
+// 	}
+// 	args->cmd[i] = NULL;
+// 	check_cmd(args, nbr, errno);
+// 	all_path = take_path(args, envp, errno);
+// 	i = 0;
+// 	while (i < nbr)
+// 	{
+// 		args->path[i] = check_path(args, all_path, i, errno);
+// 		i++;
+// 	}
+// 	args->path[i] = NULL;
+// }
 
-void	pipex(t_args *args, char **envp, int errno)
-{
-	int pfd[2];
-	int	pid1;
-	int	pid2;
+// void	before_pipe(t_args *args, int pfd[2], char **envp, int errno)
+// {
+// 	dup2(args->file[0], STDIN_FILENO);
+// 	dup2(pfd[1], STDOUT_FILENO);
+// 	close(pfd[0]);
+// 	close(pfd[1]);
+// 	if (execve(args->path[0], args->cmd[0], envp) == -1)
+// 		free_args(args, 1, NULL, errno);
+// }
 
-	if (pipe(pfd) == -1)
-		free_args(args, 1, NULL, errno);
-	pid1 = fork();
-	if (pid1 == -1)
-		free_args(args, 1, NULL, errno);
-	if (pid1 == 0)
-		before_pipe(args, pfd, envp, errno);
-	pid2 = fork();
-	if (pid2 == -1)
-		free_args(args, 1, NULL, errno);
-	if (pid2 == 0)
-		after_pipe(args, pfd, envp, errno);
-	close(pfd[0]);
-	close(pfd[1]);
-	waitpid(pid1, NULL, 0);
-	waitpid(pid2, NULL, 0);
-}
+// void	after_pipe(t_args *args, int pfd[2], char **envp, int errno)
+// {
+// 	dup2(pfd[0], STDIN_FILENO);
+// 	dup2(args->file[1], STDOUT_FILENO);
+// 	close(pfd[0]);
+// 	close(pfd[1]);
+// 	if (execve(args->path[1], args->cmd[1], envp) == -1)
+// 		free_args(args, 1, NULL, errno);
+// }
+
+// void	pipex(t_args *args, char **envp, int errno)
+// {
+// 	int	pfd[2];
+// 	int	pid1;
+// 	int	pid2;
+
+// 	if (pipe(pfd) == -1)
+// 		free_args(args, 1, NULL, errno);
+// 	pid1 = fork();
+// 	if (pid1 == -1)
+// 		free_args(args, 1, NULL, errno);
+// 	if (pid1 == 0)
+// 		before_pipe(args, pfd, envp, errno);
+// 	pid2 = fork();
+// 	if (pid2 == -1)
+// 		free_args(args, 1, NULL, errno);
+// 	if (pid2 == 0)
+// 		after_pipe(args, pfd, envp, errno);
+// 	close(pfd[0]);
+// 	close(pfd[1]);
+// 	waitpid(pid1, NULL, 0);
+// 	waitpid(pid2, NULL, 0);
+// }
 
 /*
 void	pipex(t_args *args, char **envp, int nbr)

@@ -1,31 +1,46 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils02.c                                          :+:      :+:    :+:   */
+/*   utils_check.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: kyuzu <kyuzu@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/09/24 22:14:26 by kyuzu             #+#    #+#             */
-/*   Updated: 2022/09/24 22:59:09 by kyuzu            ###   ########.fr       */
+/*   Created: 2022/09/24 23:49:34 by kyuzu             #+#    #+#             */
+/*   Updated: 2022/09/24 23:51:29 by kyuzu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-t_args	*init_args(int n, int errno)
+void	check_fd(t_args *args, int errno)
 {
-	t_args	*args;
-
-	args = malloc(sizeof(t_args));
-	if (args == NULL)
-		put_msg_and_exit(NULL, errno);
-	args->cmd = malloc(sizeof(char **) * (n + 1));
-	args->path = malloc(sizeof(char *) * (n + 1));
-	if (args->cmd == NULL || args->path == NULL)
-		put_msg_and_exit(NULL, errno);
-	return (args);
+	if (args->file[0] == -1 || args->file[1] == -1)
+	{
+		free_args(args, 0, NULL, errno);
+	}
 }
 
+void	check_cmd(t_args *args, int nbr, int errno)
+{
+	int	i;
+
+	i = 0;
+	while (i < nbr)
+	{
+		if (args->cmd[i] == NULL)
+		{
+			i = 0;
+			while (i < nbr)
+			{
+				if (args->cmd[i] != NULL)
+					free_double_pointer(args->cmd[i]);
+				i++;
+			}
+			free_args(args, 0, NULL, errno);
+		}
+		i++;
+	}
+}
 
 char	*check_path(t_args *args, char **all_path, int nbr, int errno)
 {
@@ -46,7 +61,7 @@ char	*check_path(t_args *args, char **all_path, int nbr, int errno)
 		}
 		else if (access(path, X_OK) == 0)
 			return (path);
-		else if (access(path, F_OK) == 0)////permission denied になって欲しい
+		else if (access(path, F_OK) == 0)
 			free_args(args, 1, NULL, errno);
 		free(path);
 		i++;
