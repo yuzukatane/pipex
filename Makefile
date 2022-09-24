@@ -12,7 +12,7 @@ $(NAME): $(OBJS) $(LIBFT)
 	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) -o $(NAME)
 
 clean:
-	rm $(OBJS)
+	rm -f $(OBJS)
 	make -C $(LIBFT_DIR) clean
 
 fclean: clean
