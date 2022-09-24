@@ -6,7 +6,7 @@
 /*   By: kyuzu <kyuzu@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/23 10:50:07 by kyuzu             #+#    #+#             */
-/*   Updated: 2022/09/25 00:11:36 by kyuzu            ###   ########.fr       */
+/*   Updated: 2022/09/25 00:21:19 by kyuzu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,5 +28,6 @@ int	main(int argc, char *argv[], char **envp)
 	check_fd(args, errno);
 	creat_cmd_and_path(args, nbr, argv, envp);
 	pipex(args, envp, errno);
+	free_args(args, 2, NULL, errno);
 	return (0);
 }
