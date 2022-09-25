@@ -6,7 +6,7 @@
 /*   By: kyuzu <kyuzu@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/24 23:51:58 by kyuzu             #+#    #+#             */
-/*   Updated: 2022/09/25 11:48:22 by kyuzu            ###   ########.fr       */
+/*   Updated: 2022/09/25 13:59:20 by kyuzu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	put_msg_and_exit(char *msg, int errno)
 	exit (1);
 }
 
-void	free_args(t_args *args, int flag, char *msg, int errno)
+void	free_args(t_args *args, t_flag flag, char *msg, int errno)
 {
 	if (flag >= 3)
 	{
