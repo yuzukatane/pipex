@@ -6,7 +6,7 @@
 /*   By: kyuzu <kyuzu@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/24 23:53:04 by kyuzu             #+#    #+#             */
-/*   Updated: 2022/09/24 23:53:36 by kyuzu            ###   ########.fr       */
+/*   Updated: 2022/09/25 11:45:38 by kyuzu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	before_pipe(t_args *args, int pfd[2], char **envp, int errno)
 	close(pfd[0]);
 	close(pfd[1]);
 	if (execve(args->path[0], args->cmd[0], envp) == -1)
-		free_args(args, 1, NULL, errno);
+		free_args(args, PFCP, NULL, errno);
 }
 
 void	after_pipe(t_args *args, int pfd[2], char **envp, int errno)
@@ -29,7 +29,7 @@ void	after_pipe(t_args *args, int pfd[2], char **envp, int errno)
 	close(pfd[0]);
 	close(pfd[1]);
 	if (execve(args->path[1], args->cmd[1], envp) == -1)
-		free_args(args, 1, NULL, errno);
+		free_args(args, PFCP, NULL, errno);
 }
 
 void	pipex(t_args *args, char **envp, int errno)
@@ -39,15 +39,15 @@ void	pipex(t_args *args, char **envp, int errno)
 	int	pid2;
 
 	if (pipe(pfd) == -1)
-		free_args(args, 1, NULL, errno);
+		free_args(args, PFCP, NULL, errno);
 	pid1 = fork();
 	if (pid1 == -1)
-		free_args(args, 1, NULL, errno);
+		free_args(args, PFCP, NULL, errno);
 	if (pid1 == 0)
 		before_pipe(args, pfd, envp, errno);
 	pid2 = fork();
 	if (pid2 == -1)
-		free_args(args, 1, NULL, errno);
+		free_args(args, PFCP, NULL, errno);
 	if (pid2 == 0)
 		after_pipe(args, pfd, envp, errno);
 	close(pfd[0]);

@@ -6,7 +6,7 @@
 /*   By: kyuzu <kyuzu@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/24 23:49:34 by kyuzu             #+#    #+#             */
-/*   Updated: 2022/09/25 00:29:37 by kyuzu            ###   ########.fr       */
+/*   Updated: 2022/09/25 11:44:35 by kyuzu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,62 +14,88 @@
 
 void	check_fd(t_args *args, int errno)
 {
-	if (args->file[0] == -1 || args->file[1] == -1)
+	if (args->file[0] == -1 && args->file[1] == -1)
 	{
-		free_args(args, 0, NULL, errno);
+		free_args(args, P, NULL, errno);
+	}
+	else if (args->file[0] == -1)
+	{
+		close(args->file[1]);
+		free_args(args, P, NULL, errno);
+	}
+	else if (args->file[1] == -1)
+	{
+		close(args->file[0]);
+		free_args(args, P, NULL, errno);
 	}
 }
 
-void	check_cmd(t_args *args, int nbr, int errno)
+void	check_cmd(t_args *args, int errno)
 {
 	int	i;
 
 	i = 0;
-	while (i < nbr)
+	while (i < 2)
 	{
 		if (args->cmd[i] == NULL)
 		{
 			i = 0;
-			while (i < nbr)
+			while (i < 2)
 			{
 				if (args->cmd[i] != NULL)
 					free_double_pointer(args->cmd[i]);
 				i++;
 			}
-			free_args(args, 0, NULL, errno);
+			free_args(args, PF, NULL, errno);
 		}
 		i++;
 	}
 }
 
-char	*check_path(t_args *args, char **all_path, int nbr, int errno)
+char	*join_three(char const *s1, char const *s2, char const *s3)
+{
+	char	*res;
+	size_t	s1_len;
+	size_t	s2_len;
+	size_t	s3_len;
+
+	s1_len = ft_strlen(s1);
+	s2_len = ft_strlen(s2);
+	s3_len = ft_strlen(s3);
+	res = malloc((int)(s1_len + s2_len + s3_len + 1) * sizeof(char));
+	if (res == NULL)
+		return (NULL);
+	ft_strlcpy(res, s1, s1_len + 1);
+	ft_strlcat(res, s2, s1_len + s2_len + 1);
+	ft_strlcat(res, s3, s1_len + s2_len + s3_len + 1);
+	return (res);
+}
+
+char	*check_path(t_args *args, char **all_path, char *cmd, int errno)
 {
 	char	*path;
-	char	*tmp;
 	int		i;
 
 	i = 0;
 	while (all_path[i] != NULL)
 	{
-		tmp = ft_strjoin(all_path[i], "/");
-		path = ft_strjoin(tmp, *args->cmd[nbr]);
-		free(tmp);
+		path = join_three(all_path[i], "/", cmd);
 		if (path == NULL)
 		{
 			free_double_pointer(all_path);
-			free_args(args, 1, NULL, errno);
+			free_args(args, PFCP, NULL, errno);
 		}
 		else if (access(path, X_OK) == 0)
 			return (path);
 		else if (access(path, F_OK) == 0)
 		{
 			free(path);
-			free_args(args, 1, NULL, errno);
+			free_args(args, PFCP, NULL, errno);
 		}
 		free(path);
 		i++;
 	}
-	cmd_not_found(args, nbr, errno);
+	cmd_not_found(args, cmd, errno);
 	return (NULL);
 }
 
@@ -88,6 +114,6 @@ char	**take_path(t_args *args, char **envp, int errno)
 	}
 	all_path = ft_split(envp[i], ':');
 	if (all_path == NULL)
-		free_args(args, 1, NULL, errno);
+		free_args(args, PFC, NULL, errno);
 	return (all_path);
 }

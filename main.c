@@ -6,7 +6,7 @@
 /*   By: kyuzu <kyuzu@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/23 10:50:07 by kyuzu             #+#    #+#             */
-/*   Updated: 2022/09/25 00:21:19 by kyuzu            ###   ########.fr       */
+/*   Updated: 2022/09/25 11:29:25 by kyuzu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,19 @@
 int	main(int argc, char *argv[], char **envp)
 {
 	t_args	*args;
-	int		nbr;
 	int		errno;
 
 	errno = 0;
 	if (argc < 5)
 		put_msg_and_exit("too few arguments", errno);
-	nbr = argc - 3;
-	args = init_args(nbr);
+	else if (argc > 5)
+		put_msg_and_exit("too much arguments", errno);
+	args = init_args();
 	args->file[0] = open(argv[1], O_RDONLY);
-	args->file[1] = open(argv[argc - 1], O_WRONLY | O_TRUNC | O_CREAT);
+	args->file[1] = open(argv[4], O_WRONLY | O_TRUNC | O_CREAT);
 	check_fd(args, errno);
-	creat_cmd_and_path(args, nbr, argv, envp);
+	creat_cmd_and_path(args, argv, envp);
 	pipex(args, envp, errno);
-	free_args(args, 2, NULL, errno);
+	free_args(args, SUCCESS, NULL, errno);
 	return (0);
 }

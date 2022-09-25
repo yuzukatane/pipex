@@ -6,7 +6,7 @@
 /*   By: kyuzu <kyuzu@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/24 23:51:58 by kyuzu             #+#    #+#             */
-/*   Updated: 2022/09/25 00:33:47 by kyuzu            ###   ########.fr       */
+/*   Updated: 2022/09/25 11:48:22 by kyuzu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,24 +39,29 @@ void	put_msg_and_exit(char *msg, int errno)
 
 void	free_args(t_args *args, int flag, char *msg, int errno)
 {
-	int	i;
-
-	if (flag > 0)
+	if (flag >= 3)
 	{
-		i = -1;
-		while (args->cmd[++i] != NULL)
-			free_double_pointer(args->cmd[i]);
+		free(args->path[0]);
+		free(args->path[1]);
 	}
-	free(args->cmd);
-	free_double_pointer(args->path);
+	if (flag >= 2)
+	{
+		free_double_pointer(args->cmd[0]);
+		free_double_pointer(args->cmd[1]);
+	}
+	if (flag >= 1)
+	{
+		close(args->file[0]);
+		close(args->file[1]);
+	}
 	free(args);
-	if (flag != 2)
+	if (flag != SUCCESS)
 		put_msg_and_exit(msg, errno);
 }
 
-void	cmd_not_found(t_args *args, int nbr, int errno)
+void	cmd_not_found(t_args *args, char *cmd, int errno)
 {
-	ft_putstr_fd(*args->cmd[nbr], 2);
+	ft_putstr_fd(cmd, 2);
 	ft_putstr_fd(" : ", 2);
-	free_args(args, 1, "command not found", errno);
+	free_args(args, PFCP, "command not found", errno);
 }
