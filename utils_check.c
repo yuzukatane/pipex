@@ -6,7 +6,7 @@
 /*   By: kyuzu <kyuzu@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/24 23:49:34 by kyuzu             #+#    #+#             */
-/*   Updated: 2022/09/25 11:44:35 by kyuzu            ###   ########.fr       */
+/*   Updated: 2022/09/26 21:20:23 by kyuzu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,7 +95,8 @@ char	*check_path(t_args *args, char **all_path, char *cmd, int errno)
 		free(path);
 		i++;
 	}
-	cmd_not_found(args, cmd, errno);
+	free(all_path);
+	cmd_not_found(args, cmd, errno, PFCP);
 	return (NULL);
 }
 

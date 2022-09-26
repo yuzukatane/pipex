@@ -6,7 +6,7 @@
 /*   By: kyuzu <kyuzu@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/23 10:51:24 by kyuzu             #+#    #+#             */
-/*   Updated: 2022/09/25 13:56:58 by kyuzu            ###   ########.fr       */
+/*   Updated: 2022/09/26 21:14:38 by kyuzu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,6 @@ char	*check_path(t_args *args, char **all_path, char *cmd, int errno);
 void	free_double_pointer(char **p);
 void	free_args(t_args *args, t_flag flag, char *msg, int errno);
 void	put_msg_and_exit(char *msg, int errno);
-void	cmd_not_found(t_args *args, char *cmd, int errno);
+void	cmd_not_found(t_args *args, char *cmd, int errno, t_flag flag);
 
 #endif

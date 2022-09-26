@@ -6,7 +6,7 @@
 /*   By: kyuzu <kyuzu@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/24 23:51:58 by kyuzu             #+#    #+#             */
-/*   Updated: 2022/09/25 13:59:20 by kyuzu            ###   ########.fr       */
+/*   Updated: 2022/09/26 21:13:44 by kyuzu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,9 @@ void	free_args(t_args *args, t_flag flag, char *msg, int errno)
 		put_msg_and_exit(msg, errno);
 }
 
-void	cmd_not_found(t_args *args, char *cmd, int errno)
+void	cmd_not_found(t_args *args, char *cmd, int errno, t_flag flag)
 {
 	ft_putstr_fd(cmd, 2);
 	ft_putstr_fd(" : ", 2);
-	free_args(args, PFCP, "command not found", errno);
+	free_args(args, flag, "command not found", errno);
 }

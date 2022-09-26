@@ -6,7 +6,7 @@
 /*   By: kyuzu <kyuzu@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/24 23:47:36 by kyuzu             #+#    #+#             */
-/*   Updated: 2022/09/25 11:08:20 by kyuzu            ###   ########.fr       */
+/*   Updated: 2022/09/26 21:14:26 by kyuzu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,12 @@ t_args	*init_args(void)
 	return (args);
 }
 
+void	is_null(t_args *args, int errno)
+{
+	if (args->cmd[0][0] == NULL || args->cmd[1][0] == NULL)
+		cmd_not_found(args, " ", errno, PFC);
+}
+
 void	creat_cmd_and_path(t_args *args, char *argv[], char **envp)
 {
 	int		errno;
@@ -33,6 +39,7 @@ void	creat_cmd_and_path(t_args *args, char *argv[], char **envp)
 	args->cmd[0] = ft_split(argv[2], ' ');
 	args->cmd[1] = ft_split(argv[3], ' ');
 	check_cmd(args, errno);
+	is_null(args, errno);
 	all_path = take_path(args, envp, errno);
 	args->path[0] = NULL;
 	args->path[1] = NULL;
