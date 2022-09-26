@@ -6,7 +6,7 @@
 /*   By: kyuzu <kyuzu@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/24 23:49:34 by kyuzu             #+#    #+#             */
-/*   Updated: 2022/09/26 21:20:23 by kyuzu            ###   ########.fr       */
+/*   Updated: 2022/09/26 21:40:19 by kyuzu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ char	*check_path(t_args *args, char **all_path, char *cmd, int errno)
 	i = 0;
 	while (all_path[i] != NULL)
 	{
-		path = join_three(all_path[i], "/", cmd);
+		path = join_three(all_path[i++], "/", cmd);
 		if (path == NULL)
 		{
 			free_double_pointer(all_path);
@@ -89,13 +89,13 @@ char	*check_path(t_args *args, char **all_path, char *cmd, int errno)
 			return (path);
 		else if (access(path, F_OK) == 0)
 		{
+			free_double_pointer(all_path);
 			free(path);
 			free_args(args, PFCP, NULL, errno);
 		}
 		free(path);
-		i++;
 	}
-	free(all_path);
+	free_double_pointer(all_path);
 	cmd_not_found(args, cmd, errno, PFCP);
 	return (NULL);
 }
