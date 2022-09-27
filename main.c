@@ -6,7 +6,7 @@
 /*   By: kyuzu <kyuzu@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/23 10:50:07 by kyuzu             #+#    #+#             */
-/*   Updated: 2022/09/25 14:18:10 by kyuzu            ###   ########.fr       */
+/*   Updated: 2022/09/27 09:36:23 by kyuzu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	main(int argc, char *argv[], char **envp)
 		put_msg_and_exit("too much arguments", errno);
 	args = init_args();
 	args->file[0] = open(argv[1], O_RDONLY);
-	args->file[1] = open(argv[4], O_WRONLY | O_TRUNC | O_CREAT);
+	args->file[1] = open(argv[4], O_WRONLY | O_TRUNC | O_CREAT, 0644);
 	check_fd(args, errno);
 	creat_cmd_and_path(args, argv, envp);
 	pipex(args, envp, errno);
