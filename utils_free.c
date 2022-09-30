@@ -6,7 +6,7 @@
 /*   By: kyuzu <kyuzu@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/24 23:51:58 by kyuzu             #+#    #+#             */
-/*   Updated: 2022/09/26 21:13:44 by kyuzu            ###   ########.fr       */
+/*   Updated: 2022/09/30 20:58:34 by kyuzu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,8 @@ void	free_args(t_args *args, t_flag flag, char *msg, int errno)
 	}
 	if (flag >= 1)
 	{
-		close(args->file[0]);
+		if (args->infile == YES)
+			close(args->file[0]);
 		close(args->file[1]);
 	}
 	free(args);

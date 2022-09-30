@@ -6,7 +6,7 @@
 /*   By: kyuzu <kyuzu@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/24 23:53:04 by kyuzu             #+#    #+#             */
-/*   Updated: 2022/09/25 11:45:38 by kyuzu            ###   ########.fr       */
+/*   Updated: 2022/09/30 20:44:43 by kyuzu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,39 @@ void	after_pipe(t_args *args, int pfd[2], char **envp, int errno)
 		free_args(args, PFCP, NULL, errno);
 }
 
+void	no_infile(t_args *args, char **envp, int errno)
+{
+	int	tmp_fd;
+
+	tmp_fd = open("tmp.txt", O_RDONLY | O_CREAT, 0664);
+	if (tmp_fd == -1)
+		free_args(args, PFCP, NULL, errno);
+	if (unlink("tmp.txt") < 0)
+	{
+		close(tmp_fd);
+		free_args(args, PFCP, NULL, errno);
+	}
+	dup2(tmp_fd, STDIN_FILENO);
+	dup2(args->file[1], STDOUT_FILENO);
+	if (execve(args->path[1], args->cmd[1], envp) == -1)
+	{
+		close(tmp_fd);
+		free_args(args, PFCP, NULL, errno);
+	}
+	close(tmp_fd);
+}
+
 void	pipex(t_args *args, char **envp, int errno)
 {
 	int	pfd[2];
 	int	pid1;
 	int	pid2;
 
+	if (args->infile == NO)
+	{
+		no_infile(args, envp, errno);
+		return ;
+	}
 	if (pipe(pfd) == -1)
 		free_args(args, PFCP, NULL, errno);
 	pid1 = fork();

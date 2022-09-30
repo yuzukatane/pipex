@@ -6,7 +6,7 @@
 /*   By: kyuzu <kyuzu@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/24 23:47:36 by kyuzu             #+#    #+#             */
-/*   Updated: 2022/09/26 21:14:26 by kyuzu            ###   ########.fr       */
+/*   Updated: 2022/09/30 19:03:03 by kyuzu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ t_args	*init_args(void)
 	args = malloc(sizeof(t_args));
 	if (args == NULL)
 		put_msg_and_exit(NULL, errno);
+	args->infile = YES;
 	return (args);
 }
 

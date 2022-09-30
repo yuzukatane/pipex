@@ -6,27 +6,19 @@
 /*   By: kyuzu <kyuzu@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/24 23:49:34 by kyuzu             #+#    #+#             */
-/*   Updated: 2022/09/26 21:40:19 by kyuzu            ###   ########.fr       */
+/*   Updated: 2022/09/30 20:48:53 by kyuzu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex.h"
 
-void	check_fd(t_args *args, int errno)
+void	check_fd(char *argv[], t_args *args)
 {
-	if (args->file[0] == -1 && args->file[1] == -1)
+	if (args->file[0] == -1)
 	{
-		free_args(args, P, NULL, errno);
-	}
-	else if (args->file[0] == -1)
-	{
-		close(args->file[1]);
-		free_args(args, P, NULL, errno);
-	}
-	else if (args->file[1] == -1)
-	{
-		close(args->file[0]);
-		free_args(args, P, NULL, errno);
+		args->infile = NO;
+		ft_putstr_fd("no such file or directory: ", 2);
+		ft_putendl_fd(argv[1], 2);
 	}
 }
 
