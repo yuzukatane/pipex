@@ -6,7 +6,7 @@
 /*   By: kyuzu <kyuzu@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/24 23:51:58 by kyuzu             #+#    #+#             */
-/*   Updated: 2022/09/30 20:58:34 by kyuzu            ###   ########.fr       */
+/*   Updated: 2022/09/30 22:27:53 by kyuzu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,11 @@ void	free_double_pointer(char **p)
 
 void	put_msg_and_exit(char *msg, int errno)
 {
-	int	er_nb;
-
-	er_nb = errno;
 	if (msg == NULL)
 		perror(NULL);
 	else
 		ft_putendl_fd(msg, 2);
+	(void)errno;
 	exit (1);
 }
 
