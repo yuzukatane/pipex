@@ -6,7 +6,7 @@
 /*   By: kyuzu <kyuzu@student.42tokyo.jp>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/24 23:49:34 by kyuzu             #+#    #+#             */
-/*   Updated: 2022/09/30 20:48:53 by kyuzu            ###   ########.fr       */
+/*   Updated: 2022/09/30 22:19:48 by kyuzu            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,11 @@ void	check_fd(char *argv[], t_args *args)
 	if (args->file[0] == -1)
 	{
 		args->infile = NO;
-		ft_putstr_fd("no such file or directory: ", 2);
-		ft_putendl_fd(argv[1], 2);
+		if (access(argv[1], F_OK) != 0)
+		{
+			ft_putstr_fd("no such file or directory: ", 2);
+			ft_putendl_fd(argv[1], 2);
+		}
 	}
 }
 
