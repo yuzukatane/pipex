@@ -24,8 +24,4 @@ re: fclean all
 $(LIBFT):
 	make -C $(LIBFT_DIR) bonus
 
-visu: $(NAME)
-	cp $(NAME) push_swap_visualizer/$(NAME)
-	./push_swap_visualizer/build/bin/visualizer
-
 .PHONY: all clean fclean re
